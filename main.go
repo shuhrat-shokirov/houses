@@ -9,25 +9,25 @@ import (
 
 type tel struct {
 	countryCode string
-	number string
+	number      string
 }
 
 type houses struct {
-	id int64
+	id   int64
 	name string
 	//postedBy int64
-	price int64
-	currency string
+	price                 int64
+	currency              string
 	distanceFromTheCenter int64
-	distanceValue string
-	district string
-	houseArea int64
-	houseAreaUnit string
-	landArea int64
-	landAreaUnit string
-	flatRoomCount int64
-	storeys int64
-	phone tel
+	distanceValue         string
+	district              string
+	houseArea             int64
+	houseAreaUnit         string
+	landArea              int64
+	landAreaUnit          string
+	flatRoomCount         int64
+	storeys               int64
+	phone                 tel
 	//text string
 }
 
@@ -68,7 +68,7 @@ func sortByDistanceFromTheCenterDec(house []houses) []houses {
 
 func searchByPrice(house []houses, limit int64) []houses {
 	result := make([]houses, 0)
-	for _, house :=range house {
+	for _, house := range house {
 		if house.price <= limit {
 			result = append(result, house)
 		}
@@ -78,7 +78,7 @@ func searchByPrice(house []houses, limit int64) []houses {
 
 func searchWithinPrice(house []houses, lowerLimit, upperLimit int64) []houses {
 	result := make([]houses, 0)
-	for _, house :=range house {
+	for _, house := range house {
 		if lowerLimit <= house.price && house.price <= upperLimit {
 			result = append(result, house)
 		}
@@ -89,7 +89,7 @@ func searchWithinPrice(house []houses, lowerLimit, upperLimit int64) []houses {
 func findByDistrict(house []houses, district string) []houses {
 	result := make([]houses, 0)
 	for _, house := range house {
-		if house.district == district{
+		if house.district == district {
 			result = append(result, house)
 		}
 	}
@@ -100,7 +100,7 @@ func findByDistricts(homes []houses, districts []string) []houses {
 	result := make([]houses, 0)
 	for _, district := range districts {
 		for _, home := range homes {
-			if home.district == district{
+			if home.district == district {
 				result = append(result, home)
 			}
 		}
@@ -109,5 +109,4 @@ func findByDistricts(homes []houses, districts []string) []houses {
 }
 
 func main() {
-	
 }
