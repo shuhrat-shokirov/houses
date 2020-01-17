@@ -28,79 +28,76 @@ type houses struct {
 	//text string
 }
 
-func sortByPriceAsc(house []houses) []houses {
+func sortBy(house []houses, less func(a, b houses) bool) []houses {
 	result := make([]houses, len(house))
 	copy(result, house)
 	sort.Slice(result, func(i, j int) bool {
-		return result[i].price < result[j].price
+		return less(result[i], result[j])
 	})
 	return result
+}
+
+func sortByPriceAsc(house []houses) []houses {
+	return sortBy(house, func(a, b houses) bool {
+		return a.price < b.price
+	})
 }
 
 func sortByPriceDec(house []houses) []houses {
-	result := make([]houses, len(house))
-	copy(result, house)
-	sort.Slice(result, func(i, j int) bool {
-		return result[i].price > result[j].price
+	return sortBy(house, func(a, b houses) bool {
+		return a.price > b.price
 	})
-	return result
 }
 func sortByDistanceFromTheCenterAsc(house []houses) []houses {
-	result := make([]houses, len(house))
-	copy(result, house)
-	sort.Slice(result, func(i, j int) bool {
-		return result[i].distanceFromTheCenter < result[j].distanceFromTheCenter
+	return sortBy(house, func(a, b houses) bool {
+		return a.distanceFromTheCenter < b.distanceFromTheCenter
 	})
-	return result
 }
 
 func sortByDistanceFromTheCenterDec(house []houses) []houses {
-	result := make([]houses, len(house))
-	copy(result, house)
-	sort.Slice(result, func(i, j int) bool {
-		return result[i].distanceFromTheCenter > result[j].distanceFromTheCenter
+	return sortBy(house, func(a, b houses) bool {
+		return a.distanceFromTheCenter > b.distanceFromTheCenter
 	})
+}
+
+func filterBy(house []houses, predicate func(house houses) bool) []houses {
+	result := make([]houses, 0)
+	for _, house := range house {
+		if predicate(house) {
+			result = append(result, house)
+		}
+	}
 	return result
 }
 
 func searchByPrice(house []houses, limit int64) []houses {
-	result := make([]houses, 0)
-	for _, house := range house {
-		if house.price <= limit {
-			result = append(result, house)
-		}
-	}
-	return result
+	return filterBy(house, func(house houses) bool {
+		return house.price <= limit
+	})
 }
 
 func searchWithinPrice(house []houses, lowerLimit, upperLimit int64) []houses {
-	result := make([]houses, 0)
-	for _, house := range house {
-		if lowerLimit <= house.price && house.price <= upperLimit {
-			result = append(result, house)
+	return filterBy(house, func(house houses) bool {
+		if house.price < lowerLimit {
+			return false
 		}
-	}
-	return result
+		if house.price > upperLimit {
+			return false
+		}
+		return true
+	})
 }
 
 func findByDistrict(house []houses, district string) []houses {
-	result := make([]houses, 0)
-	for _, house := range house {
-		if house.district == district {
-			result = append(result, house)
-		}
-	}
-	return result
+	return filterBy(house, func(house houses) bool {
+		return house.district == district
+	})
 }
 
 func findByDistricts(homes []houses, districts []string) []houses {
 	result := make([]houses, 0)
-	for _, district := range districts {
-		for _, home := range homes {
-			if home.district == district {
-				result = append(result, home)
-			}
-		}
+	for _, district := range districts  {
+		result =append(result, findByDistrict(homes, district)...)
 	}
 	return result
 }
