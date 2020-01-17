@@ -1,9 +1,6 @@
 package main
 
 import (
-	//"nettextproto"
-	//"sort"
-	//"syscall"
 	"sort"
 )
 
